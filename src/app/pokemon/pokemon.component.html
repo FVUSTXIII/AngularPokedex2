@@ -1,0 +1,16 @@
+<mat-card *ngIf= "pokemon$ | async as pokemon" class="pokeCard" style="--background-color: {{pokeTypesColorConstants[mainPokeType ?? 0]}}">
+    <div class="upperInfoSection">
+        <div class="portrait_section">
+            <img *ngIf = "(pokemon$ | async) as pokemon" mat-card-md-image src="{{ pokemon.imgSrc}}" >
+        </div>
+        <div class="title_section">
+            <mat-card-title> # {{pokemon.id}} - {{ pokemon.name | titlecase }}</mat-card-title>
+        </div>
+        <div class="icons-section" *ngFor = "let type of pokemon.types"> 
+            <div> <img mat-card-sm-image src = "./../../assets/type-icons/{{type.name}}.svg" ></div>
+        </div>
+    </div>
+
+    <app-pokemon-detail class="display-details-section" [details]="pokemon.details"></app-pokemon-detail> 
+   
+</mat-card>

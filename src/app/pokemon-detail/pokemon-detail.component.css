@@ -1,0 +1,12 @@
+.details-info-section {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.details-info-section > div {
+    flex-basis: 0;
+    flex-grow: 1;
+    box-sizing: border-box;
+}

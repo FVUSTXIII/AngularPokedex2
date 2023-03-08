@@ -1,0 +1,43 @@
+<mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./../../assets/pokeball-icon/pokeballicon.svg">
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="details-info-section">
+        <div class="basic-info-section">
+            <h1>Basic Information: </h1>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle> Weight: </span>
+                    <span matListItemLine> {{ weight }} Lbs</span>
+                    
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle> Height: </span>
+                    <span matListItemLine> {{ height }} ''</span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="abilities-and-moves">
+            <mat-tab-group>
+                <mat-tab label="Abilities"> 
+                    <mat-list-item *ngFor="let ability of abilities; last as last">
+                        <mat-list-item >{{ ability.name }} </mat-list-item>
+                        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+                    </mat-list-item>    
+                </mat-tab>
+                <mat-tab label="Moves"> 
+                    <mat-form-field appearance="fill">
+                        <mat-label>Moves</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let move of moves" [value]="move.url">
+                            {{move.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</mat-expansion-panel>
