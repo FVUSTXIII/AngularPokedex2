@@ -57,7 +57,7 @@ describe('PokemonListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Should populate array upon initialization (Happy Path)', () => {
+  it('should populate array upon initialization (happy path)', () => {
     component.ngOnInit();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -65,7 +65,7 @@ describe('PokemonListComponent', () => {
     });
   });
 
-  it('Should notify upon getting error from service (Sad Path)', () => {
+  it('should populate array upon initialization (sad path)', () => {
     pokemonListServiceMock.getPokemonList.and.callFake(() => {
       return throwError({
         message: 'An error happened'

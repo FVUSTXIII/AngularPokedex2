@@ -19,11 +19,11 @@ export class PokemonDetailComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    if (this.validateDataIntegrity()) {
-      this.weight = this.details!.weight ?? 0
-      this.height = this.details!.height ?? 0
-      this.abilities = this.details!.abilities ?? [];
-      this.moves = this.details!.moves ?? [];
+    if (this.details && this.validateDataIntegrity()) {
+      this.weight = this.details.weight ?? 0;
+      this.height = this.details.height ?? 0;
+      this.abilities = this.details.abilities ?? [];
+      this.moves = this.details.moves ?? [];
     }
   }
   validateDataIntegrity() : boolean {

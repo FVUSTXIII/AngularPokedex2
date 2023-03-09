@@ -60,7 +60,7 @@ describe ('Pokemon List Service ', () => {
                 expect(service.error).toBeTruthy();
                 expect(service.error?.message).toBe("Error!");
             }
-        })
+        });
     }); 
 
     

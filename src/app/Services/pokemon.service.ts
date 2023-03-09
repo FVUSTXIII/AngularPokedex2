@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of, Subject } from 'rxjs';
 import { Pokemon } from '../Models/pokemon.model';
 import { PokemonResponseObject } from '../Models/pokemon-response-object.model';
 import { Move } from '../Models/move.model';
@@ -12,17 +12,22 @@ import { Type }  from '../Models/type.model';
 })
 export class PokemonService {
 
+  error : any = new Subject<string>();
   constructor(private http: HttpClient) {}
 
   getPokemon(url: string) : Observable<Pokemon> {
     return this.http.get<PokemonResponseObject>(url).pipe(
-      map(response => this.processResponse(response))
+      map(response => this.processResponse(response)),
+      catchError(error => {
+        this.error.next(error.message);
+        return of(error);
+      })
     );
   }
 
   processResponse(response: any) : Pokemon {
     if (response === null) {
-      throw new Error("unable to format null or undefined object!!");
+      throw new Error("unable to format null or undefined object!");
     }
     return {
       id: response.id,

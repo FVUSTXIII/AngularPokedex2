@@ -16,14 +16,15 @@ export class PokemonComponent implements OnInit {
   pokemon$!: Observable<Pokemon>;
   mainPokeType! : string | null;
   secondPokeType!: string| null;
-  pokemonError! : string;
+  errorMsg! : string;
   pokeTypesColorConstants : any = typeColors;
   constructor(private pokemonService: PokemonService) {
      
   };
 
   ngOnInit(): void {
-      this.pokemonService.getPokemon(this.url).subscribe(
+    this.errorMsg = ''  
+    this.pokemonService.getPokemon(this.url).subscribe(
         (response) => {
           console.log(response)
           this.pokemon$ = of({
@@ -34,7 +35,7 @@ export class PokemonComponent implements OnInit {
             details: response.details
           })
         },(error) => {
-          this.pokemonError = `Error fetching the pokemon`;
+          this.errorMsg = error.message;
           
         }, () => {
           console.log('finish')
@@ -42,10 +43,7 @@ export class PokemonComponent implements OnInit {
             this.mainPokeType = poke.types?.slice(0,1)[0]?.name ?? null;
             this.secondPokeType = poke.types?.slice(0,1)[1]?.name ?? null; 
           })
-        }
-
-        )
-      
-  }
+        })
+  };
 
 }
