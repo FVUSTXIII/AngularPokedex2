@@ -25,6 +25,7 @@ export class PokemonComponent implements OnInit {
   ngOnInit(): void {
       this.pokemonService.getPokemon(this.url).subscribe(
         (response) => {
+          console.log(response)
           this.pokemon$ = of({
             id : response.id,
             name: this.name,

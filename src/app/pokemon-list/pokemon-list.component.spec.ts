@@ -26,8 +26,9 @@ const pokemonListMockedInfo : PokemonListResponse = {
     }
   ]
 }
-const pokemonListServiceMock = jasmine.createSpyObj<PokemonListService>('PokemonListService', ['getPokemonList']);
-
+const pokemonListServiceMock = jasmine.createSpyObj({
+  getPokemonList : of(pokemonListMockedInfo)
+});
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
   let fixture: ComponentFixture<PokemonListComponent>;
@@ -39,7 +40,7 @@ describe('PokemonListComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ PokemonListComponent ],
       imports: [HttpClientModule ],
-      providers: [ { provide: PokemonListService, useValue: pokemonListService } ]
+      providers: [ { provide: PokemonListService, useValue: pokemonListServiceMock } ]
     })
     .compileComponents();
   });
@@ -47,30 +48,33 @@ describe('PokemonListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PokemonListComponent);
     component = fixture.componentInstance;
+    
     fixture.detectChanges();
    
     
   });
-  it('should connect to PokemonListService (happy path)', () => {
-    pokemonListService.getPokemonList.and.returnValue(of(pokemonListMockedInfo));
-    spyOn(component, 'ngOnInit').and.callThrough();
-    fixture.detectChanges();
-    expect(component.ngOnInit).toHaveBeenCalled();
-    expect(pokemonListService.getPokemonList).toHaveBeenCalled();
-    
-  })
-  it ('should handle errors when unable to connect to PokemonListService (sad path)', () => {
-
-  })
-  it('should fetch the list of pokemon on initialization (happy path)', () => {
-    
- 
+  it('should init', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should handle errors when fetching the list of pokemon on initialization (sad path)', () => {
- 
+  it('Should populate array upon initialization (Happy Path)', () => {
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.basePokeList.length).toBeGreaterThan(0);
+    });
   });
 
-  
-  
+  it('Should notify upon getting error from service (Sad Path)', () => {
+    pokemonListServiceMock.getPokemonList.and.callFake(() => {
+      return throwError({
+        message: 'An error happened'
+      });
+    });
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.errorMsg).toBeTruthy();
+    });
+  }); 
 });

@@ -5,7 +5,7 @@ import { Pokemon } from '../Models/pokemon.model';
 import { PokemonResponseObject } from '../Models/pokemon-response-object.model';
 import { Move } from '../Models/move.model';
 import { Ability } from '../Models/ability.model';
-import { Type, }  from '../Models/type.model';
+import { Type }  from '../Models/type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,10 @@ export class PokemonService {
     );
   }
 
-  private processResponse(response: PokemonResponseObject) : Pokemon {
+  processResponse(response: any) : Pokemon {
+    if (response === null) {
+      throw new Error("unable to format null or undefined object!!");
+    }
     return {
       id: response.id,
       name: response.name,
@@ -29,12 +32,12 @@ export class PokemonService {
         name : type.type.name
       })),
       details: {
-        abilities: response.abilities.map((ability: any) => (<Ability>{
+        abilities: response.abilities.map((ability: any) => (<Ability> {
           name: ability.ability.name,
           url: ability.ability.url
         })),
         height: response.height,
-        moves: response.moves.map((move: any) => (<Move>{
+        moves: response.moves.map((move: any) => (<Move> {
            name: move.move.name,
            url: move.move.url
         })),

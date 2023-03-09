@@ -10,29 +10,27 @@ import { PokemonListService } from '../Services/pokemon-list-service.service';
 export class PokemonListComponent implements OnInit {
 
   basePokeList : PokemonListResponseObject[] = [];
-
+  errorMsg : string = '';
   constructor(private pokeListService: PokemonListService) { }
 
 
   ngOnInit(): void {
+    console.log('This component is alive');
     this.onGetPokemons();
   }
 
   onGetPokemons() : void  {
+    this.errorMsg = '';
     this.pokeListService.getPokemonList().subscribe(
       (response) => {
+        console.log("se recibio esta informacion: " , response)
         response.results.forEach(pokemon => {
-          let poke : PokemonListResponseObject = {
-            name : pokemon.name,
-            url  : pokemon.url
-          }
-          this.basePokeList.push(poke);
+          const {name, url} = pokemon;
+          this.basePokeList.push({name, url});
         })
       },
       (error) => {
-        console.error(error)
-      },
-      () => {
+        this.errorMsg = error.message;
       }
     );
   }
