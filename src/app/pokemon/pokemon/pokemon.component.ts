@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { of, Observable } from 'rxjs';
-import { Pokemon } from '../Models/pokemon.model';
-import { PokemonService } from '../Services/pokemon.service';
-import {typeColors} from '../res/type-colors'
+import { Pokemon } from 'src/app/Models/pokemon.model';
+import { PokemonService } from 'src/app/Services/pokemon.service';
+import { typeColors } from 'src/app/res/type-colors';
 
 @Component({
   selector: 'app-pokemon',
@@ -15,12 +15,9 @@ export class PokemonComponent implements OnInit {
   @Input() url ! : string ;
   pokemon$!: Observable<Pokemon>;
   mainPokeType! : string | null;
-  secondPokeType!: string| null;
   errorMsg! : string;
   pokeTypesColorConstants : any = typeColors;
-  constructor(private pokemonService: PokemonService) {
-     
-  };
+  constructor(private pokemonService: PokemonService) {};
 
   ngOnInit(): void {
     this.errorMsg = ''  
@@ -41,9 +38,13 @@ export class PokemonComponent implements OnInit {
           console.log('finish')
           this.pokemon$.subscribe(poke => {
             this.mainPokeType = poke.types?.slice(0,1)[0]?.name ?? null;
-            this.secondPokeType = poke.types?.slice(0,1)[1]?.name ?? null; 
           })
         })
   };
+
+  getMainPokeType() : string | null {
+    return this.mainPokeType ? this.mainPokeType : null;
+  }
+
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PokemonListResponseObject } from '../Models/pokemon-list-response.model';
-import { PokemonListService } from '../Services/pokemon-list-service.service';
+import { PokemonListResponseObject } from '../../Models/pokemon-list-response.model';
+import { PokemonListService } from '../../Services/pokemon-list-service.service';
 @Component({
   selector: 'app-pokemon-list',
   templateUrl: './pokemon-list.component.html',
@@ -12,7 +12,6 @@ export class PokemonListComponent implements OnInit {
   basePokeList : PokemonListResponseObject[] = [];
   errorMsg : string = '';
   constructor(private pokeListService: PokemonListService) { }
-
 
   ngOnInit(): void {
     console.log('This component is alive');
@@ -34,4 +33,9 @@ export class PokemonListComponent implements OnInit {
       }
     );
   }
+
+  getBasePokeList() : PokemonListResponseObject[] {
+    return this.basePokeList ? this.basePokeList : [];
+  }
+  
 }

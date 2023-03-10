@@ -26,7 +26,7 @@ describe('PokemonDetailComponent', () => {
       abilities: [{ name: 'ability1',  url: 'url1' }, { name: 'ability2', url: 'url2' }],
       moves: [{ name: 'move1', url: 'url1' }, { name: 'move2', url: 'url2' }]
     };
-    fixture.whenRenderingDone().then((value) => {
+    fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
       const element = fixture.nativeElement;
       expect(element.querySelector('.basic-info-section mat-list-item:nth-child(1) span.mat-list-item-line').textContent).toContain('100');
@@ -39,7 +39,7 @@ describe('PokemonDetailComponent', () => {
 
   it('should render Pokemon details correctly (sad path)', () => {
     component.details = null;
-    fixture.whenRenderingDone().then((value) => {
+    fixture.whenRenderingDone().then(() => {
       fixture.detectChanges();
       const element = fixture.nativeElement;
       expect(element.querySelector('.basic-info-section mat-list-item:nth-child(1) span.mat-list-item-line')).toBeNull();

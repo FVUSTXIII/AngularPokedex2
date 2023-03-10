@@ -1,7 +1,7 @@
-<mat-card *ngIf= "pokemon$ | async as pokemon" class="pokeCard" style="--background-color: {{pokeTypesColorConstants[mainPokeType ?? 0]}}">
+<mat-card *ngIf= "pokemon$ | async as pokemon" class="pokeCard" style="--background-color: {{pokeTypesColorConstants[getMainPokeType() ?? 0]}}">
     <div class="upperInfoSection">
         <div class="portrait_section">
-            <img *ngIf = "(pokemon$ | async) as pokemon" mat-card-md-image src="{{ pokemon.imgSrc}}" >
+            <img mat-card-md-image src="{{ pokemon.imgSrc}}" >
         </div>
         <div class="title_section">
             <mat-card-title> # {{pokemon.id}} - {{ pokemon.name | titlecase }}</mat-card-title>

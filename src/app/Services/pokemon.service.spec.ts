@@ -1,4 +1,6 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { inject, TestBed } from "@angular/core/testing";
 import { of, throwError } from 'rxjs';
 import { PokemonDetails } from "../Models/pokemon-details.model";
 import { PokemonListResponse } from "../Models/pokemon-list-response.model";
@@ -779,41 +781,83 @@ const input : any = {
     "weight": 130
 };
 describe('Pokemon Service ', () => {
-    let service : PokemonService;
-    let httpClientSpy : jasmine.SpyObj<HttpClient>;
+    let httpClientSpy : jasmine.SpyObj<HttpClient> = jasmine.createSpyObj('HttpClient', ['get', 'post', 'put', 'delete']);;
 
     beforeEach(() => {
-        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-        service = new PokemonService(httpClientSpy);
+        TestBed.configureTestingModule({
+            providers: [{provide: HttpClient, useValue: httpClientSpy}, PokemonService],
+            imports: [HttpClientTestingModule]
+        });
     });
 
-    it('should format the response and filter unnecessary information (happy path)', () => {
-        
-        const expectedOutput : Pokemon = {
-            "id": 2,
-            "name": "ivysaur",
-            "imgSrc": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
-            "types": [
+    it('should format the response and filter unnecessary information (happy path)', inject([PokemonService], (service : PokemonService) => {
+            const expectedOutput : Pokemon = {
+                "id": 2,
+                "name": "ivysaur",
+                "imgSrc": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
+                "types": [
+                    {
+                        "name": "grass"
+                    },
+                    {
+                        "name": "poison"
+                    }
+                ],
+                "details": {
+                    "abilities": [
+                        {
+                            "name": "overgrow",
+                            "url": "https://pokeapi.co/api/v2/ability/65/"
+                        },
+                        {
+                            "name": "chlorophyll",
+                            "url": "https://pokeapi.co/api/v2/ability/34/"
+                        }
+                    ],
+                    "height": 10,
+                    "moves": [
+                        {
+                            "name": "swords-dance",
+                            "url": "https://pokeapi.co/api/v2/move/14/"
+                        },
+                        {
+                            "name": "cut",
+                            "url": "https://pokeapi.co/api/v2/move/15/"
+                        }
+                    ],
+                    "weight": 130
+                }
+            } 
+            const output = service.processResponse(input);
+            expect(output).toEqual(expectedOutput);
+        })
+    );
+
+    it('should format the response and filter unnecesary information (sad path)', inject([PokemonService], (service : PokemonService) => {
+       
+            expect(() => service.processResponse(null)).toThrowError("unable to format null or undefined object!");
+        })
+    );
+
+    it('should return an object with all the information needed to be rendered (happy path)', inject([PokemonService], (service: PokemonService) => {
+            const typesArray : Type[] = [
                 {
                     "name": "grass"
                 },
                 {
                     "name": "poison"
                 }
-            ],
-            "details": {
-                "abilities": [
-                    {
-                        "name": "overgrow",
-                        "url": "https://pokeapi.co/api/v2/ability/65/"
-                    },
-                    {
-                        "name": "chlorophyll",
-                        "url": "https://pokeapi.co/api/v2/ability/34/"
-                    }
-                ],
-                "height": 10,
-                "moves": [
+            ];
+            const details : PokemonDetails = {
+                abilities: [{
+                    "name": "overgrow",
+                    "url": "https://pokeapi.co/api/v2/ability/65/"
+                },
+                {
+                    "name": "chlorophyll",
+                    "url": "https://pokeapi.co/api/v2/ability/34/"
+                }],
+                moves: [
                     {
                         "name": "swords-dance",
                         "url": "https://pokeapi.co/api/v2/move/14/"
@@ -823,75 +867,38 @@ describe('Pokemon Service ', () => {
                         "url": "https://pokeapi.co/api/v2/move/15/"
                     }
                 ],
-                "weight": 130
+                height: 10,
+                weight: 130
             }
-        } 
-        const output = service.processResponse(input);
-        expect(output).toEqual(expectedOutput);
-    })
+            httpClientSpy.get.and.returnValue(of(input));
+            const url = 'https://someurl.com/pokemon/2';
+            const pokemonObservable = service.getPokemon(url);
 
-    it('should format the response and filter unnecesary information (sad path)', () => {
-       
-        expect(() => service.processResponse(null)).toThrowError("unable to format null or undefined object!");
-    });
-
-    it('should return an object with all the information needed to be rendered (happy path)', () => {
-        const typesArray : Type[] = [
-            {
-                "name": "grass"
-            },
-            {
-                "name": "poison"
-            }
-        ];
-        const details : PokemonDetails = {
-            abilities: [{
-                "name": "overgrow",
-                "url": "https://pokeapi.co/api/v2/ability/65/"
-            },
-            {
-                "name": "chlorophyll",
-                "url": "https://pokeapi.co/api/v2/ability/34/"
-            }],
-            moves: [
-                {
-                    "name": "swords-dance",
-                    "url": "https://pokeapi.co/api/v2/move/14/"
-                },
-                {
-                    "name": "cut",
-                    "url": "https://pokeapi.co/api/v2/move/15/"
-                }
-            ],
-            height: 10,
-            weight: 130
-        }
-        httpClientSpy.get.and.returnValue(of(input));
-        const url = 'https://someurl.com/pokemon/2';
-        const pokemonObservable = service.getPokemon(url);
-
-        pokemonObservable.subscribe(pokemon => {
-            expect(pokemon.id).toEqual(2);
-            expect(pokemon.name).toEqual('ivysaur');
-            expect(pokemon.imgSrc).toEqual('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png');
-            expect(pokemon.types).toEqual(typesArray);
-            expect(pokemon.details).toEqual(details);
-        });
-
-    });  
-
-    it ('should return an object with all the information needed to be rendered (sad path)' , () => {
-        const invalidUrl = 'https://pokeapi.co/api/v2/pokemon/invalid';
-        httpClientSpy.get.and.callFake(() => {
-            return throwError({
-                message: "Error!"
+            pokemonObservable.subscribe(pokemon => {
+                expect(pokemon.id).toEqual(2);
+                expect(pokemon.name).toEqual('ivysaur');
+                expect(pokemon.imgSrc).toEqual('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png');
+                expect(pokemon.types).toEqual(typesArray);
+                expect(pokemon.details).toEqual(details);
             });
-        });
-        service.getPokemon(invalidUrl).subscribe({
-            error: (error) => {
-                expect(service.error).toBeTruthy();
-                expect(service.error?.message).toBe("Error!");
-            }
-        });
-    })
+
+        })
+    
+    );  
+
+    it ('should return an object with all the information needed to be rendered (sad path)' ,inject([PokemonService], (service : PokemonService) => {
+            const invalidUrl = 'https://pokeapi.co/api/v2/pokemon/invalid';
+            httpClientSpy.get.and.callFake(() => {
+                return throwError({
+                    message: "Error!"
+                });
+            });
+            service.getPokemon(invalidUrl).subscribe({
+                error: (error) => {
+                    expect(service.error).toBeTruthy();
+                    expect(service.error?.message).toBe("Error!");
+                }
+            });
+        })
+    )
 })

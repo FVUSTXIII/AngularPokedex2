@@ -3,16 +3,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, of, throwError } from 'rxjs';
 
 import { PokemonComponent } from './pokemon.component';
-import { PokemonService } from '../Services/pokemon.service';
-import { Pokemon } from '../Models/pokemon.model';
+import { PokemonService } from 'src/app/Services/pokemon.service';
+import { Pokemon } from 'src/app/Models/pokemon.model';
 
 describe('PokemonComponent', () => {
   let component: PokemonComponent;
   let fixture: ComponentFixture<PokemonComponent>;
   let pokemonService: PokemonService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [ PokemonComponent ],
       providers: [PokemonService]

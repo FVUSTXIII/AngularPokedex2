@@ -2,8 +2,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { PokemonListResponse, PokemonListResponseObject } from '../Models/pokemon-list-response.model';
-import { PokemonListService } from '../Services/pokemon-list-service.service';
+import { PokemonListResponse, PokemonListResponseObject } from '../../Models/pokemon-list-response.model';
+import { PokemonListService } from '../../Services/pokemon-list-service.service';
 
 import { PokemonListComponent } from './pokemon-list.component';
 
@@ -34,10 +34,10 @@ describe('PokemonListComponent', () => {
   let fixture: ComponentFixture<PokemonListComponent>;
   let pokemonListService : jasmine.SpyObj<PokemonListService>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     pokemonListService = jasmine.createSpyObj('PokemonListService', ['getPokemonList']);
 
-    await TestBed.configureTestingModule({
+     TestBed.configureTestingModule({
       declarations: [ PokemonListComponent ],
       imports: [HttpClientModule ],
       providers: [ { provide: PokemonListService, useValue: pokemonListServiceMock } ]
@@ -50,8 +50,6 @@ describe('PokemonListComponent', () => {
     component = fixture.componentInstance;
     
     fixture.detectChanges();
-   
-    
   });
   it('should init', () => {
     expect(component).toBeTruthy();
