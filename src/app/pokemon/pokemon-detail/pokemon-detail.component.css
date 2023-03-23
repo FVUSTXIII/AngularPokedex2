@@ -10,3 +10,8 @@
     flex-grow: 1;
     box-sizing: border-box;
 }
+
+.details_header { 
+    display: flex;
+    justify-content: space-between;
+}

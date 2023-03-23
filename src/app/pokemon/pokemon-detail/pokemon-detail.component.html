@@ -1,7 +1,10 @@
 <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="details_header">
           <img src="./../../assets/pokeball-icon/pokeballicon.svg">
+          <button mat-fab extended>
+            <a [routerLink]="['/evolution-tree', getPokeId()]"><mat-icon>pets</mat-icon></a>
+          </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="details-info-section">
@@ -37,7 +40,9 @@
                         </mat-select>
                       </mat-form-field>
                 </mat-tab>
+                
             </mat-tab-group>
+            
         </div>
     </div>
 </mat-expansion-panel>

@@ -9,7 +9,7 @@ import { PokemonDetails } from '../../Models/pokemon-details.model';
   styleUrls: ['./pokemon-detail.component.css']
 })
 export class PokemonDetailComponent implements OnInit {
-
+  @Input() pokeId! : number | null;
   @Input() details! : PokemonDetails | null;
   @Input() hideToggle : boolean = true
   weight : number = 0;
@@ -18,7 +18,14 @@ export class PokemonDetailComponent implements OnInit {
   moves : Move[] = [];
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("DETAILS: ", this.details)
+  }
+
+  getPokeId() : number {
+    return this.pokeId ? this.pokeId : 0;
+  }
+
   getWeight() : number {
     return this.details && this.details.weight ? this.details.weight : 0; 
   } 

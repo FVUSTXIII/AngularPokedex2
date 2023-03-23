@@ -1,0 +1,9 @@
+<ng-container *ngIf="linkType === 0; else elseStates">
+    <mat-icon >skip_previous</mat-icon>
+</ng-container>
+
+<ng-template #elseStates>
+    <ng-container *ngIf="linkType === 2;">
+        <mat-icon>skip_next</mat-icon>
+    </ng-container>
+</ng-template>

@@ -35,7 +35,6 @@ export class PokemonComponent implements OnInit {
           this.errorMsg = error.message;
           
         }, () => {
-          console.log('finish')
           this.pokemon$.subscribe(poke => {
             this.mainPokeType = poke.types?.slice(0,1)[0]?.name ?? null;
           })

@@ -1,0 +1,7 @@
+<div>
+    <app-pokemon-link-connector [linkType] = "0" *ngIf = "hasPrior;">
+    </app-pokemon-link-connector>
+    <img src="{{getImg()}}" alt="">
+    <app-pokemon-link-connector [linkType] = "2" *ngIf = "hasNext;">
+    </app-pokemon-link-connector>
+</div>
